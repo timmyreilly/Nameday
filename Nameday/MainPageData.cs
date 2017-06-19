@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -7,9 +8,57 @@ using System.Threading.Tasks;
 
 namespace Nameday
 {
-    class MainPageData : INotifyPropertyChanged 
+    class MainPageData : INotifyPropertyChanged
     {
         private string _greeting = "Hello World";
+
+        private List<NamedayModel> _allNamedays = new List<NamedayModel>();
+        public ObservableCollection<NamedayModel> Namedays { get; set; }
+
+
+        public MainPageData()
+        {
+            Namedays = new ObservableCollection<NamedayModel>();
+
+            for (int month = 1; month <= 12; month++)
+            {
+                _allNamedays.Add(new NamedayModel(month, 1, new string[] { "Adam" }));
+                _allNamedays.Add(new NamedayModel(month, 24, new string[] { "Eve", "Andrew" }));
+            }
+
+            PerformFiltering(); 
+        }
+
+        private void PerformFiltering()
+        {
+            if(_filter == null)
+            {
+                _filter = ""; 
+            }
+
+            var lowerCaseFilter = Filter.ToLowerInvariant().Trim();
+
+            var result = _allNamedays.Where(d => d.NamesAsString.ToLowerInvariant()
+            .Contains(lowerCaseFilter))
+            .ToList();
+
+            var toRemove = Namedays.Except(result).ToList(); 
+
+            foreach (var x in toRemove)
+            {
+                Namedays.Remove(x); 
+            }
+
+            var resultCount = result.Count; 
+            for (int i = 0; i < resultCount; i++)
+            {
+                var resultItem = result[i]; 
+                if (i + 1 > Namedays.Count || !Namedays[i].Equals(resultItem))
+                {
+                    Namedays.Insert(i, resultItem);
+                }
+            }
+        }
 
         public string Greeting
         {
@@ -18,27 +67,16 @@ namespace Nameday
             {
                 if (value == _greeting)
                 {
-                    return; 
+                    return;
                 }
-                _greeting =  value;
+                _greeting = value;
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Greeting)));
             }
         }
 
 
-        public List<NamedayModel> Namedays { get; set; }
 
-        public MainPageData()
-        {
-            Namedays = new List<NamedayModel>();
-
-            for (int month = 1; month <= 12; month++)
-            {
-                Namedays.Add(new NamedayModel(month, 1, new string[] { "Adam" }));
-                Namedays.Add(new NamedayModel(month, 24, new string[] { "Eve", "Andrew" }));
-            }
-        }
 
         private NamedayModel _selectedNameday;
 
@@ -57,8 +95,26 @@ namespace Nameday
                 }
                 else
                 {
-                    Greeting = "Hello " + value.NamesAsString; 
+                    Greeting = "Hello " + value.NamesAsString;
                 }
+            }
+        }
+
+        private string _filter;
+
+        public string Filter
+        {
+            get { return _filter; }
+            set
+            {
+                if (value == _filter)
+                {
+                    return;
+                }
+                _filter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Filter)));
+
+                PerformFiltering();
             }
         }
 

@@ -30,6 +30,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <ListView x:Name="listView" ItemTemplate="{StaticResource NamedayModelTemplate}" ItemsSource="{Binding Namedays}" Grid.Row="1" SelectedItem="{Binding SelectedNameday, Mode=TwoWay}"/>
+            <TextBox x:Name="textBox" TextWrapping="Wrap" Margin="10" PlaceholderText="Search for names" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
