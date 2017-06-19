@@ -29,7 +29,7 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <ListView x:Name="listView" ItemTemplate="{StaticResource NamedayModelTemplate}" ItemsSource="{Binding Namedays}" Grid.Row="1"/>
+            <ListView x:Name="listView" ItemTemplate="{StaticResource NamedayModelTemplate}" ItemsSource="{Binding Namedays}" Grid.Row="1" SelectedItem="{Binding SelectedNameday, Mode=TwoWay}"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
