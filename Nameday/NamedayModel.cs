@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Nameday
 {
@@ -19,11 +15,14 @@ namespace Nameday
             Names = names; 
         }
 
-        public string NamesAsString
-        {
-            get { return string.Join(", ", Names); }
-        }
+        //public string NamesAsString
+        //{
+        //    get { return string.Join(", ", Names); }
+        //}
 
-        // Now with C# 6 I could do this ->  public string NamesAsString => string.Join(", ", Names); 
+        // Now with C# 6 I could do this ->  
+        public string NamesAsString => string.Join(", ", Names); 
+
+        public NamedayModel() { }
     }
 }
