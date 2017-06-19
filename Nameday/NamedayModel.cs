@@ -2,11 +2,13 @@
 
 namespace Nameday
 {
-    class NamedayModel
+    public class NamedayModel
     {
         public int Month { get; set; }
         public int Day { get; set; }
         public IEnumerable<string> Names { get; set; }
+
+        public NamedayModel() { }
 
         public NamedayModel(int month, int day, IEnumerable<string> names)
         {
@@ -23,6 +25,6 @@ namespace Nameday
         // Now with C# 6 I could do this ->  
         public string NamesAsString => string.Join(", ", Names); 
 
-        public NamedayModel() { }
+        
     }
 }

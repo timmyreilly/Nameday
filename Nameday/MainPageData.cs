@@ -20,28 +20,33 @@ namespace Nameday
         {
             Namedays = new ObservableCollection<NamedayModel>();
 
-            //for (int month = 1; month <= 12; month++)
-            //{
-            //    _allNamedays.Add(new NamedayModel(month, 1, new string[] { "Adam" }));
-            //    _allNamedays.Add(new NamedayModel(month, 24, new string[] { "Eve", "Andrew" }));
-            //}
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            {
+                for (int month = 1; month <= 12; month++)
+                {
+                    _allNamedays.Add(new NamedayModel(month, 1, new string[] { "Adam" }));
+                    _allNamedays.Add(new NamedayModel(month, 24, new string[] { "Eve", "Andrew" }));
+                }
 
-            //PerformFiltering(); 
-
-            LoadData(); 
+                PerformFiltering();
+            }
+            else
+            {
+                LoadData();
+            }
         }
 
         public async void LoadData()
         {
             _allNamedays = await NamedayRepository.GetAllNamedaysAsync();
-            PerformFiltering();  
+            PerformFiltering();
         }
 
         private void PerformFiltering()
         {
-            if(_filter == null)
+            if (_filter == null)
             {
-                _filter = ""; 
+                _filter = "";
             }
 
             var lowerCaseFilter = Filter.ToLowerInvariant().Trim();
@@ -50,17 +55,17 @@ namespace Nameday
             .Contains(lowerCaseFilter))
             .ToList();
 
-            var toRemove = Namedays.Except(result).ToList(); 
+            var toRemove = Namedays.Except(result).ToList();
 
             foreach (var x in toRemove)
             {
-                Namedays.Remove(x); 
+                Namedays.Remove(x);
             }
 
-            var resultCount = result.Count; 
+            var resultCount = result.Count;
             for (int i = 0; i < resultCount; i++)
             {
-                var resultItem = result[i]; 
+                var resultItem = result[i];
                 if (i + 1 > Namedays.Count || !Namedays[i].Equals(resultItem))
                 {
                     Namedays.Insert(i, resultItem);
