@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Appointments;
+using Windows.ApplicationModel.Contacts;
+using Windows.ApplicationModel.Email;
 
 namespace Nameday
 {
@@ -15,6 +18,7 @@ namespace Nameday
         private List<NamedayModel> _allNamedays = new List<NamedayModel>();
         public ObservableCollection<NamedayModel> Namedays { get; set; }
 
+        public ObservableCollection<ContactEx> Contacts { get; } = new ObservableCollection<ContactEx>();
 
         public MainPageData()
         {
@@ -22,6 +26,14 @@ namespace Nameday
 
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
+
+                Contacts = new ObservableCollection<ContactEx>
+                {
+                    new ContactEx("Contact", "1"),
+                    new ContactEx("Contact", "2"),
+                    new ContactEx("Contact", "3")
+                };
+
                 for (int month = 1; month <= 12; month++)
                 {
                     _allNamedays.Add(new NamedayModel(month, 1, new string[] { "Adam" }));
@@ -110,6 +122,27 @@ namespace Nameday
                 {
                     Greeting = "Hello " + value.NamesAsString;
                 }
+
+                UpdateContacts();
+            }
+        }
+
+        private async void UpdateContacts()
+        {
+            Contacts.Clear();
+
+            if (SelectedNameday != null)
+            {
+                var contactStore = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AllContactsReadOnly);
+
+                foreach (var name in SelectedNameday.Names)
+                {
+                    foreach(var contact in await contactStore.FindContactsAsync(name))
+                    {
+                        Contacts.Add(new ContactEx(contact)); 
+                    }
+                }
+
             }
         }
 
@@ -129,6 +162,32 @@ namespace Nameday
 
                 PerformFiltering();
             }
+        }
+
+        public async Task SendEmailAsync(Contact contact)
+        {
+            if (contact == null || contact.Emails.Count == 0)
+            {
+                return; 
+            }
+
+            var msg = new EmailMessage();
+            msg.To.Add(new EmailRecipient(contact.Emails[0].Address));
+            msg.Subject = "Happy Nameday!";
+
+            await EmailManager.ShowComposeNewEmailAsync(msg); 
+        }
+
+        public async void AddReminderToCalendarAsync()
+        {
+            var appointment = new Appointment();
+            appointment.Subject = "Nameday reminder for " + SelectedNameday.NamesAsString;
+            appointment.AllDay = true;
+            appointment.BusyStatus = AppointmentBusyStatus.Free;
+            var dateThisYear = new DateTime(DateTime.Now.Year, SelectedNameday.Month, SelectedNameday.Day);
+            appointment.StartTime = dateThisYear < DateTime.Now ? dateThisYear.AddYears(1) : dateThisYear;
+
+            await AppointmentManager.ShowEditNewAppointmentAsync(appointment); 
         }
 
     }

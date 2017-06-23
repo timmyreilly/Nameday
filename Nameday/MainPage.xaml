@@ -14,7 +14,27 @@
                 <ItemsControl ItemsSource="{Binding Names}"/>
             </StackPanel>
         </DataTemplate>
+        <DataTemplate x:Key="ContactExTemplate">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Ellipse Fill="{ThemeResource SystemControlBackgroundAccentBrush}" Height="100" VerticalAlignment="Top" Width="100" Margin="0"/>
+                <TextBlock Text="{Binding Initials, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+                <Ellipse Fill="{Binding Picture, Mode=OneWay}" Height="100" VerticalAlignment="Top" Width="100" Margin="0"/>
+                <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Contact.FullName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Button x:Name="btEmail" Content="Email " HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding EmailVisibility, Mode=OneWay}" Click="btEmail_Click"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Calendar" Label="Create reminder"/>
+        </CommandBar>
+    </Page.BottomAppBar>
     <Page.DataContext>
         <local:MainPageData/>
     </Page.DataContext>
@@ -38,7 +58,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Greeting}" d:LayoutOverrides="Height"/>
-            <Ellipse Fill="#FFF4F4F5" Grid.Row="1" Stroke="Black"/>
+            <ScrollViewer Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding Contacts}" ItemTemplate="{StaticResource ContactExTemplate}"/>
+            </ScrollViewer>
         </Grid>
 
     </Grid>
