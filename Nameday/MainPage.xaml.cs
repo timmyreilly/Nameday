@@ -36,5 +36,10 @@ namespace Nameday
                 await ((MainPageData)this.DataContext).SendEmailAsync(contact.Contact); 
             }
         }
+
+        private void appBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(AboutPage));
+        }
     }
 }
