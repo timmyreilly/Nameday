@@ -11,7 +11,7 @@ using Windows.ApplicationModel.Email;
 
 namespace Nameday
 {
-    class MainPageData : INotifyPropertyChanged
+    public class MainPageData : INotifyPropertyChanged
     {
         private string _greeting = "Hello World";
 
@@ -22,6 +22,9 @@ namespace Nameday
 
         public MainPageData()
         {
+
+            AddReminderCommand = new AddReminderCommand(this); 
+
             Namedays = new ObservableCollection<NamedayModel>();
 
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -124,6 +127,7 @@ namespace Nameday
                 }
 
                 UpdateContacts();
+                AddReminderCommand.FireCanExecuteChanged();
             }
         }
 
@@ -178,6 +182,8 @@ namespace Nameday
             await EmailManager.ShowComposeNewEmailAsync(msg); 
         }
 
+        public AddReminderCommand AddReminderCommand { get; }
+
         public async void AddReminderToCalendarAsync()
         {
             var appointment = new Appointment();
@@ -190,5 +196,23 @@ namespace Nameday
             await AppointmentManager.ShowEditNewAppointmentAsync(appointment); 
         }
 
+    }
+
+    public class AddReminderCommand : System.Windows.Input.ICommand
+    {
+        private MainPageData _mpd; 
+
+        public AddReminderCommand(MainPageData mpd)
+        {
+            _mpd = mpd; 
+        }
+
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter) => _mpd.SelectedNameday != null;
+
+        public void Execute(object parameter) => _mpd.AddReminderToCalendarAsync();
+
+        public void FireCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty); 
     }
 }

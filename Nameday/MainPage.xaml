@@ -32,7 +32,7 @@
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Calendar" Label="Create reminder"/>
+            <AppBarButton Icon="Calendar" Label="Create reminder" Command="{Binding AddReminderCommand, Mode=OneWay}"/>
         </CommandBar>
     </Page.BottomAppBar>
     <Page.DataContext>
