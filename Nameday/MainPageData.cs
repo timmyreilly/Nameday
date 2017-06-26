@@ -11,7 +11,7 @@ using Windows.ApplicationModel.Email;
 
 namespace Nameday
 {
-    public class MainPageData : INotifyPropertyChanged
+    public class MainPageData : ObservableObject
     {
         private string _greeting = "Hello World";
 
@@ -20,10 +20,12 @@ namespace Nameday
 
         public ObservableCollection<ContactEx> Contacts { get; } = new ObservableCollection<ContactEx>();
 
+        public Settings Settings { get; } = new Settings();  
+
         public MainPageData()
         {
 
-            AddReminderCommand = new AddReminderCommand(this); 
+            AddReminderCommand = new AddReminderCommand(this);
 
             Namedays = new ObservableCollection<NamedayModel>();
 
@@ -91,16 +93,7 @@ namespace Nameday
         public string Greeting
         {
             get { return _greeting; }
-            set
-            {
-                if (value == _greeting)
-                {
-                    return;
-                }
-                _greeting = value;
-
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Greeting)));
-            }
+            set { Set(ref _greeting, value); }
         }
 
 
@@ -141,9 +134,9 @@ namespace Nameday
 
                 foreach (var name in SelectedNameday.Names)
                 {
-                    foreach(var contact in await contactStore.FindContactsAsync(name))
+                    foreach (var contact in await contactStore.FindContactsAsync(name))
                     {
-                        Contacts.Add(new ContactEx(contact)); 
+                        Contacts.Add(new ContactEx(contact));
                     }
                 }
 
@@ -157,14 +150,10 @@ namespace Nameday
             get { return _filter; }
             set
             {
-                if (value == _filter)
+                if (Set(ref _filter, value))
                 {
-                    return;
+                    PerformFiltering();
                 }
-                _filter = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Filter)));
-
-                PerformFiltering();
             }
         }
 
@@ -172,14 +161,14 @@ namespace Nameday
         {
             if (contact == null || contact.Emails.Count == 0)
             {
-                return; 
+                return;
             }
 
             var msg = new EmailMessage();
             msg.To.Add(new EmailRecipient(contact.Emails[0].Address));
             msg.Subject = "Happy Nameday!";
 
-            await EmailManager.ShowComposeNewEmailAsync(msg); 
+            await EmailManager.ShowComposeNewEmailAsync(msg);
         }
 
         public AddReminderCommand AddReminderCommand { get; }
@@ -193,18 +182,18 @@ namespace Nameday
             var dateThisYear = new DateTime(DateTime.Now.Year, SelectedNameday.Month, SelectedNameday.Day);
             appointment.StartTime = dateThisYear < DateTime.Now ? dateThisYear.AddYears(1) : dateThisYear;
 
-            await AppointmentManager.ShowEditNewAppointmentAsync(appointment); 
+            await AppointmentManager.ShowEditNewAppointmentAsync(appointment);
         }
 
     }
 
     public class AddReminderCommand : System.Windows.Input.ICommand
     {
-        private MainPageData _mpd; 
+        private MainPageData _mpd;
 
         public AddReminderCommand(MainPageData mpd)
         {
-            _mpd = mpd; 
+            _mpd = mpd;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -213,6 +202,6 @@ namespace Nameday
 
         public void Execute(object parameter) => _mpd.AddReminderToCalendarAsync();
 
-        public void FireCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty); 
+        public void FireCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

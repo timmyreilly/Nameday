@@ -32,6 +32,10 @@
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar>
+            <CommandBar.SecondaryCommands>
+                <AppBarToggleButton x:Name="appBarToggleButton" Label="Enable Reminders" IsChecked="{Binding Settings.NotificationsEnabled, Mode=TwoWay}"/>
+                <AppBarToggleButton x:Name="appBarToggleButton1" Label="Enable Live Tiles" IsChecked="{Binding Settings.UpdatingLiveTileEnabled, Mode=TwoWay}"/>
+            </CommandBar.SecondaryCommands>
             <AppBarButton Icon="Calendar" Label="Create reminder" Command="{Binding AddReminderCommand, Mode=OneWay}"/>
         </CommandBar>
     </Page.BottomAppBar>
