@@ -25,6 +25,11 @@ namespace BackgroundServices
                 await SendNotificationAsync();
             }
 
+            if (settings.UpdatingLiveTileEnabled)
+            {
+                await UpdateTilesAsync();
+            }
+
             _deferral.Complete(); 
         }
 
@@ -73,6 +78,31 @@ namespace BackgroundServices
             builder.SetTrigger(new TimeTrigger(120, false));
 
             builder.Register();
+        }
+
+
+        private async static Task UpdateTilesAsync()
+        {
+            var todaysNames = await NamedayRepository.GetTodaysNamesAsStringAsync();
+            if (todaysNames == null)
+                return;
+
+            var template =
+@"<tile>
+    <visual version=""4"">
+        <binding template=""TileMedium"">
+            <text hint-wrap=""true"">{0}</text>
+        </binding>
+        <binding template=""TileWide"">
+            <text hint-wrap=""true"">{0}</text>
+        </binding>
+    </visual>
+</tile>";
+            var content = string.Format(template, todaysNames);
+            var doc = new Windows.Data.Xml.Dom.XmlDocument();
+            doc.LoadXml(content);
+
+            TileUpdateManager.CreateTileUpdaterForApplication().Update(new TileNotification(doc));
         }
     }
 }

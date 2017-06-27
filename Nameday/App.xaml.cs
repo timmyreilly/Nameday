@@ -37,8 +37,12 @@ namespace Nameday
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
+
+            var vcdFile = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///VoiceCommandDefinition.xml"));
+
+            await Windows.ApplicationModel.VoiceCommands.VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(vcdFile);
 
             BackgroundServices.MyBackgroundTask.Register(); 
 
@@ -79,6 +83,25 @@ namespace Nameday
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
+            }
+        }
+
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
+
+            if (args.Kind == ActivationKind.VoiceCommand)
+            {
+                // The app was invoked via a voice command.
+            }
+
+            if (Window.Current.Content == null)
+            {
+                var rootFrame = new Frame();
+                rootFrame.NavigationFailed += OnNavigationFailed;
+                Window.Current.Content = rootFrame;
+                rootFrame.Navigate(typeof(MainPage));
+                Window.Current.Activate(); 
             }
         }
 
