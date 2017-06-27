@@ -6,9 +6,9 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Nameday
+namespace Common
 {
-    class NamedayRepository
+    public class NamedayRepository
     {
         private static List<NamedayModel> allNamedaysCache; 
 

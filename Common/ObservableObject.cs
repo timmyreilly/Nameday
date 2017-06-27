@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Nameday
+namespace Common
 {
     public class ObservableObject : INotifyPropertyChanged
     {

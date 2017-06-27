@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Nameday
+namespace Common
 {
     public class Settings : ObservableObject
     {

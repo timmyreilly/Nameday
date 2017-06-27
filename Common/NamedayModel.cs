@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Nameday
+namespace Common
 {
     public class NamedayModel
     {
