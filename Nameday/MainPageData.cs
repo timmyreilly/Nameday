@@ -58,6 +58,9 @@ namespace Nameday
         {
             _allNamedays = await NamedayRepository.GetAllNamedaysAsync();
             PerformFiltering();
+
+            var now = DateTime.Now;
+            SelectedNameday = _allNamedays.FirstOrDefault(d => d.Day == now.Day && d.Month == now.Month); 
         }
 
         private void PerformFiltering()
@@ -109,7 +112,7 @@ namespace Nameday
             get { return _selectedNameday; }
             set
             {
-                _selectedNameday = value;
+                Set( ref _selectedNameday , value);
 
                 if (value == null)
                 {

@@ -4,5 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Nameday"
     RequestedTheme="Light">
+    <Application.Resources>
+        <SolidColorBrush x:Key="BrandRed" Color="#FFA03434"/>
+    </Application.Resources>
 
 </Application>
