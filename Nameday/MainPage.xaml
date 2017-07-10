@@ -189,8 +189,8 @@
                 <TextBlock Text="{Binding Initials, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FocusVisualPrimaryBrush="White" Foreground="White"/>
                 <Ellipse Fill="{Binding Picture, Mode=OneWay}" Height="100" VerticalAlignment="Top" Width="100" Margin="0"/>
                 <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Contact.FullName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="40"/>
-                    <AppBarButton x:Name="btEmail" Content="Email " HorizontalAlignment="Left" VerticalAlignment="Stretch" Visibility="{Binding EmailVisibility, Mode=OneWay}" Click="btEmail_Click" Icon="Mail" Label="Send email" Style="{StaticResource AppBarButtonStyle1}" FontSize="16"/>
+                    <TextBlock Text="{Binding Contact.FullName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="40" Margin="0"/>
+                    <AppBarButton x:Name="btEmail" Content="Email " HorizontalAlignment="Left" VerticalAlignment="Stretch" Visibility="{Binding EmailVisibility, Mode=OneWay}" Click="btEmail_Click" Icon="Mail" Label="Send email" Style="{StaticResource AppBarButtonStyle1}" FontSize="16" Width="Auto" Margin="0,0,10,0"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
