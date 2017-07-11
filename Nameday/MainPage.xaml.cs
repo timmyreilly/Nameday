@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,9 +23,20 @@ namespace Nameday
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private MainPageData Logic => DataContext as MainPageData; 
+
         public MainPage()
         {
             this.InitializeComponent();
+            Logic.PropertyChanged += Logic_PropertyChanged; 
+        }
+
+        private void Logic_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainPageData.LoadingState))
+            {
+                VisualStateManager.GoToState(this, Logic.LoadingState.ToString(), true); 
+            }
         }
 
         private async void btEmail_Click(object sender, RoutedEventArgs e)

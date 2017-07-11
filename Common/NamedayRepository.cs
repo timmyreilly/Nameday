@@ -19,6 +19,8 @@ namespace Common
                 return allNamedaysCache; 
             }
 
+            await Task.Delay(3000);
+
             var client = new HttpClient();
             var stream = await client.GetStreamAsync("http://www.response.hu/namedays_hu.json");
 
