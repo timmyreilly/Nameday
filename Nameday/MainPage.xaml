@@ -296,10 +296,16 @@
             </Grid.RowDefinitions>
             <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Greeting}" d:LayoutOverrides="Height"/>
             <ScrollViewer Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding Contacts}" ItemTemplate="{StaticResource ContactExTemplate}"/>
+                <ItemsControl ItemsSource="{Binding Contacts}" ItemTemplate="{StaticResource ContactExTemplate}">
+                    <ItemsControl.ItemContainerTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition FromVerticalOffset="0" FromHorizontalOffset="28" IsStaggeringEnabled="True"/>
+                        </TransitionCollection>
+                    </ItemsControl.ItemContainerTransitions>
+                </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <Grid x:Name="grid" Background="#CC000000" Grid.ColumnSpan="2">
+        <Grid x:Name="grid" Background="#CC000000" Grid.ColumnSpan="2" d:IsHidden="True">
             <StackPanel x:Name="stackPanel" Margin="452,195,626,339" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                 <StackPanel.RenderTransform>
                     <CompositeTransform/>
