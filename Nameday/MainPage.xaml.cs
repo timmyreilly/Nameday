@@ -53,5 +53,10 @@ namespace Nameday
         {
             Frame.Navigate(typeof(AboutPage));
         }
+
+        private void AppBarButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            splitView.IsPaneOpen = true; 
+        }
     }
 }
