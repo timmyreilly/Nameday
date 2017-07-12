@@ -12,7 +12,7 @@ using Windows.ApplicationModel.Email;
 
 namespace Nameday
 {
-    public class MainPageData : ObservableObject
+    public class MainPageViewModel : ObservableObject
     {
         private string _greeting = "Hello world";
 
@@ -26,7 +26,7 @@ namespace Nameday
 
         public Settings Settings { get; } = new Settings();
         
-        public MainPageData()
+        public MainPageViewModel()
         {
             AddReminderCommand = new AddReminderCommand(this);
 
@@ -203,9 +203,9 @@ namespace Nameday
 
     public class AddReminderCommand : System.Windows.Input.ICommand
     {
-        private MainPageData _mpd;
+        private MainPageViewModel _mpd;
 
-        public AddReminderCommand(MainPageData mpd)
+        public AddReminderCommand(MainPageViewModel mpd)
         {
             _mpd = mpd;
         }

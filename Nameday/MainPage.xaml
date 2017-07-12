@@ -211,7 +211,7 @@
         </CommandBar>
     </Page.BottomAppBar>
     <Page.DataContext>
-        <local:MainPageData/>
+        <local:MainPageViewModel/>
     </Page.DataContext>
 
     <Grid>

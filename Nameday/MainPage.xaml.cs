@@ -23,7 +23,7 @@ namespace Nameday
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private MainPageData Logic => DataContext as MainPageData; 
+        private MainPageViewModel Logic => DataContext as MainPageViewModel; 
 
         public MainPage()
         {
@@ -33,7 +33,7 @@ namespace Nameday
 
         private void Logic_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(MainPageData.LoadingState))
+            if (e.PropertyName == nameof(MainPageViewModel.LoadingState))
             {
                 VisualStateManager.GoToState(this, Logic.LoadingState.ToString(), true); 
             }
@@ -45,7 +45,7 @@ namespace Nameday
 
             if (contact != null)
             {
-                await ((MainPageData)this.DataContext).SendEmailAsync(contact.Contact); 
+                await ((MainPageViewModel)this.DataContext).SendEmailAsync(contact.Contact); 
             }
         }
 
